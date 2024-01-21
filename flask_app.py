@@ -22,16 +22,33 @@
 # # Fetch the content of the /foo route and display it
 # response = requests.get("http://localhost:8888/foo")
 # st.write(response.text)
+# from flask import Flask, request
+# import os
+
+# app = Flask(__name__)
+
+# @app.route('/', methods=['POST'])
+# def upload_file():
+#     if 'file' not in request.files:
+#         return 'No file part'
+#     file = request.files['file']
+#     # Save the file to a directory
+#     file.save(os.path.join('uploads', file.filename))
+#     return 'File uploaded successfully'
+
 from flask import Flask, request
 import os
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return 'No file part'
     file = request.files['file']
-    # Save the file to a directory
+    # Ensure the 'uploads' directory exists
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
+    # Save the file to the 'uploads' directory
     file.save(os.path.join('uploads', file.filename))
     return 'File uploaded successfully'
